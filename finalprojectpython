@@ -1,0 +1,63 @@
+from tkinter import *
+
+ques=['How many days are there in a week?','How many hours are there in a day?','Rainbow consist of how many colours?','How many minutes are there in an hour?','How many seconds are there in a minute?','Name the National animal of India?',' How many continents are there in the world?','Sun rises in the.....','Name the largest planet of our Solar System?','Which festival is called the festival of colours?']
+ans=[['5 DAYS','3 DAYS','7 DAYS','9 DAYS'],['23 HOURS','24 HOURS','22 HOURS','30 HOURS'],[9,4,5,7],[60,65,55,50],[65,60,55,50],['LION','TIGER','ELEPHANT','MONKEY'],[5,6,7,8],['EAST','WEST','NORTH','SOUTH'],['EARTH','SATURN','MARS','JUPITER'],['DIWALI','DUSSEHRA','HOLI','RAM NAVMI']]
+ans1=[3,2,4,1,2,2,3,1,4,3]
+res=[]
+root=Tk()
+root.title('Question paper')
+root.geometry('500x300')
+x=0
+var=IntVar()
+def marks():
+    c=len(res)
+    mar=Label(root,text=c)
+    mar.place(x=220,y=260)
+def submit():
+    global x
+    d=var.get()
+    if d==ans1[x]:
+        res.append(1)
+    x=x+1
+    fxn(x)
+def fxn(x):
+    if x<10:
+        
+        spc1=Label(root,text='                          ')
+        spc1.place(x=20,y=60)
+        spc2=Label(root,text='                          ')
+        spc2.place(x=20,y=80)
+        spc3=Label(root,text='                          ')
+        spc3.place(x=20,y=100)
+        spc4=Label(root,text='                          ')
+        spc4.place(x=20,y=120)
+
+        q=ques[x]
+        a1=ans[x][0]
+        a2=ans[x][1]
+        a3=ans[x][2]
+        a4=ans[x][3]
+        l1.config(text=q)
+        r1=Radiobutton(root,text=a1,variable=var,value=1)
+        r1.place(x=20,y=60)
+        r2=Radiobutton(root,text=a2,variable=var,value=2)
+        r2.place(x=20,y=80)
+        r3=Radiobutton(root,text=a3,variable=var,value=3)
+        r3.place(x=20,y=100)
+        r4=Radiobutton(root,text=a4,variable=var,value=4)
+        r4.place(x=20,y=120)
+        btn1.config(text='NEXT',command=submit)
+        
+        
+    else:
+        btn1.config(text='Show result',command=marks)
+  
+def start():
+    global x
+    fxn(x)
+   
+l1=Label(root)
+l1.place(x=20,y=40)
+btn1=Button(root,text='START',command=start)
+btn1.place(x=220,y=200)
+root.mainloop()
