@@ -87,7 +87,7 @@ def enter():
             subentry.config(command=submitinsql)
             subentry.place(x=165,y=250)
             closebtn=Button(win1,text='Close',command=quit)
-            closebtn.place(x=250,y=250)
+            closebtn.place(x=350,y=250)
             
      #asking for how many questions
     win1=Toplevel()
