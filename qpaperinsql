@@ -1,0 +1,214 @@
+from tkinter import *
+import mysql.connector
+from tkinter import messagebox
+mydb=mysql.connector.connect(host='localhost', user='root')
+mycursor=mydb.cursor()
+root=Tk()
+root.geometry('300x200')
+root.title('Question paper')
+x=0
+qlistf=[]
+o1listf=[]
+o2listf=[]
+o3listf=[]
+o4listf=[]
+ansinresf=[]
+finalans=[]
+def enter():
+    
+    def submitq():
+       
+        def submitinsql():
+            #code for submitting data 
+            mycursor=mydb.cursor()
+            q=e1.get()
+            id1=identry.get()
+            option1=oe1.get()
+            option2=oe2.get()
+            option3=oe3.get()
+            option4=oe4.get()
+            ans1=aentry.get()
+            e1.delete(0,END)
+            oe1.delete(0,END)
+            oe2.delete(0,END)
+            oe3.delete(0,END)
+            oe4.delete(0,END)
+            identry.delete(0,END)
+            aentry.delete(0,END)
+            id1=int(id1)
+            ans1=int(ans1)
+            try:
+                cmd=f"insert into sameer values('{q}','{option1}','{option2}','{option3}','{option4}',{ans1})"
+                #mycursor.execute('create database mydb')
+                mycursor.execute('use mydb')
+                #mycursor.execute(create table sameer(questions varchar(50),option1 varchar(20),option2 varchar(20),option3 varchar(20),option4 varchar(20, id ans)))
+                mydb.commit()
+                mycursor.execute(cmd)
+                mydb.commit()
+                mycursor.close()
+            except:
+                messagebox.showerror('Error','Please check your data')
+        #closing window
+        def quit():
+            win1.destroy()
+            
+            
+        #code for entering data
+        enloop=e1.get()
+        enloop=int(enloop)
+        e1.delete(0,END)
+        
+        for x in range(enloop):
+            inp.config(text='')
+            qlabel=Label(win1,text="Enter Question")
+            qlabel.place(x=40,y=60)
+            e1.config(width=40)
+            e1.place(x=150,y=60)
+            idlabel=Label(win1,text="Enter ID, starting from 0")
+            idlabel.place(x=40,y=40)
+            identry=Entry(win1,width=5)
+            identry.place(x=200,y=40)
+            o1=Label(win1,text='Enter option 1')
+            o1.place(x=40,y=90)
+            oe1=Entry(win1,width=30)
+            oe1.place(x=150,y=90)
+            o2=Label(win1,text='Enter option 2')
+            o2.place(x=40,y=110)
+            oe2=Entry(win1,width=30)
+            oe2.place(x=150,y=110)
+            o3=Label(win1,text='Enter option 3')
+            o3.place(x=40,y=130)
+            oe3=Entry(win1,width=30)
+            oe3.place(x=150,y=130)
+            o4=Label(win1,text='Enter option 4')
+            o4.place(x=40,y=150)
+            oe4=Entry(win1,width=30)
+            oe4.place(x=150,y=150)
+            alabel=Label(win1,text='Enter answer')
+            alabel.place(x=40,y=200)
+            aentry=Entry(win1,width=10)
+            aentry.place(x=120,y=200)
+            subentry.config(command=submitinsql)
+            subentry.place(x=165,y=250)
+            closebtn=Button(win1,text='Close',command=quit)
+            closebtn.place(x=250,y=250)
+            
+     #asking for how many questions
+    win1=Toplevel()
+    win1.geometry('400x300')
+    win1.title('Enter Questions, Options and answers')
+    inp=Label(win1,text='How many questions do you want?')
+    inp.place(x=100,y=100)
+    e1=Entry(win1,width=10)
+    e1.place(x=160,y=150)
+    subentry=Button(win1,text='Submit',command=submitq)
+    subentry.place(x=165,y=200)
+
+    
+    
+    
+def startfake():
+    global x
+    #closing window
+    def quit1():
+        win2.destroy()
+        
+    #calculating and showing marks
+    def marks():
+        f=len(finalans)
+        messagebox.showinfo('Result',f"You have attained {f} marks")
+    
+    
+    
+    
+    def start(x):
+        
+            
+        def startinc():
+            global x
+            userget=var.get()
+            userget=int(userget)
+            if userget==ansinresf[x]:
+                finalans.append(1)
+            x=x+1
+            if x<len(qlistf):
+                start(x)
+            else:
+                subbut.config(text='SHOW RESULT',command=marks)
+        
+        spc1=Label(win2,text='                          ')
+        spc1.place(x=20,y=60)
+        spc2=Label(win2,text='                          ')
+        spc2.place(x=20,y=80)
+        spc3=Label(win2,text='                          ')
+        spc3.place(x=20,y=100)
+        spc4=Label(win2,text='                          ')
+        spc4.place(x=20,y=120)
+        spc5=Label(win2,text='                          ')
+        spc5.place(x=20,y=40)
+        q1=qlistf[x]
+        opt1=o1listf[x]
+        opt2=o2listf[x]
+        opt3=o3listf[x]
+        opt3=o3listf[x]
+        opt4=o4listf[x]
+        var=IntVar()
+        queslabel=Label(win2,text=q1)
+        queslabel.place(x=20,y=40)
+        r1=Radiobutton(win2,text=opt1,variable=var,value=1)
+        r1.place(x=20,y=60)
+        r2=Radiobutton(win2,text=opt2,variable=var,value=2)
+        r2.place(x=20,y=80)
+        r3=Radiobutton(win2,text=opt3,variable=var,value=3)
+        r3.place(x=20,y=100)
+        r4=Radiobutton(win2,text=opt4,variable=var,value=4)
+        r4.place(x=20,y=120)  
+        subbut=Button(win2,text='NEXT',command=startinc)
+        subbut.place(x=220,y=200)
+        clbtn=Button(win2,text='Close',command=quit1)
+        clbtn.place(x=300,y=200)
+    
+    
+    
+    win2=Toplevel()
+    win2.geometry('500x300')
+    mycursor=mydb.cursor()
+    mycursor.execute('use mydb')
+    mydb.commit()
+    mycursor.execute('select questions from sameer')
+    qlist=mycursor.fetchall()
+    for y in qlist:
+        qlistf.append(y[0])
+    mycursor.execute('select option1 from sameer')
+    o1list=mycursor.fetchall()
+    for y in o1list:
+        o1listf.append(y[0])
+    mycursor.execute('select option2 from sameer')
+    o2list=mycursor.fetchall()
+    for y in o2list:
+        o2listf.append(y[0])
+    mycursor.execute('select option3 from sameer')
+    o3list=mycursor.fetchall()
+    for y in o3list:
+        o3listf.append(y[0])
+    mycursor.execute('select option4 from sameer')
+    o4list=mycursor.fetchall()
+    for y in o4list:
+        o4listf.append(y[0])
+    mycursor.execute('select ans from sameer')
+    ansinres=mycursor.fetchall()
+    for y in ansinres:
+        ansinresf.append(y[0])
+    start(x)
+    
+    
+ini=Label(root,text="Which option would you like to choose?")
+ini.place(x=40,y=50)
+inib1=Button(root,text="Enter Q/A",command=enter)
+inib1.place(x=50,y=100)
+inib2=Button(root,text="Start exam",command=startfake)
+inib2.place(x=180,y=100)
+
+
+
+root.mainloop()
