@@ -112,7 +112,7 @@ def startfake():
     #calculating and showing marks
     def marks():
         f=len(finalans)
-        messagebox.showinfo('Result',f"You have attained {f} marks")
+        messagebox.showinfo('Result',f"You have scored {f} marks")
     
     
     
