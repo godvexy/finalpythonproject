@@ -3,6 +3,10 @@ import mysql.connector
 from tkinter import messagebox
 mydb=mysql.connector.connect(host='localhost', user='root')
 mycursor=mydb.cursor()
+mycursor.execute('create database mydb')
+mycursor.execute('use mydb')
+mycursor.execute(create table sameer(questions varchar(50),option1 varchar(20),option2 varchar(20),option3 varchar(20),option4 varchar(20, id ans)))
+mydb.commit()
 root=Tk()
 root.geometry('300x200')
 root.title('Question paper')
@@ -37,10 +41,6 @@ def enter():
             ans1=int(ans1)
             try:
                 cmd=f"insert into sameer values('{q}','{option1}','{option2}','{option3}','{option4}',{ans1})"
-                #mycursor.execute('create database mydb')
-                mycursor.execute('use mydb')
-                #mycursor.execute(create table sameer(questions varchar(50),option1 varchar(20),option2 varchar(20),option3 varchar(20),option4 varchar(20, id ans)))
-                mydb.commit()
                 mycursor.execute(cmd)
                 mydb.commit()
                 mycursor.close()
