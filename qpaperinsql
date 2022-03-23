@@ -27,8 +27,8 @@ def strtbtn():
 def ctable():
     global flag
     if flag==0:
-        try:
-            
+        
+        try:  
             mycursor.execute('use mydb')
             mydb.commit()
             mycursor.execute('create table sameer1(questions varchar(50),option1 varchar(20),option2 varchar(20),option3 varchar(20),option4 varchar(20), ans int)')
@@ -36,7 +36,9 @@ def ctable():
             messagebox.showinfo('Success!','Table created!')
             flag=1
         except:
-            messagebox.showerror('Error','Something went wrong!')
+            flag=1
+            pass
+       
             
     else:
         pass
@@ -114,6 +116,7 @@ def enter():
             closebtn.place(x=350,y=250)
             
      #asking for how many questions
+    finalans=[]
     win1=Toplevel()
     win1.geometry('400x300')
     ctable()
@@ -126,14 +129,18 @@ def enter():
     subentry.place(x=165,y=200)
 
 def dtable():
-    mycursor.execute('use mydb')
-    mydb.commit()
-    mycursor.execute('drop table sameer1')
-    mydb.commit()
-    messagebox.showinfo('Success!','Data Deleted')
+    try:
+        mycursor.execute('use mydb')
+        mydb.commit()
+        mycursor.execute('drop table sameer1')
+        mydb.commit()
+        messagebox.showinfo('Success!','Data Deleted')
+    except:
+        messagebox.showerror('Error','Questions Data already deleted')
     
     
 def startfake():
+    finalans=[]
     global x
     #closing window
     def quit1():
