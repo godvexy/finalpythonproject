@@ -1,0 +1,433 @@
+from tkinter import *
+import mysql.connector
+from tkinter import messagebox
+import pandas as pd
+
+
+root=Tk()
+root.geometry('300x200')
+root.title('Question paper')
+x=0
+qlistf=[]
+o1listf=[]
+o2listf=[]
+o3listf=[]
+o4listf=[]
+ansinresf=[]
+finalans=[]
+flag=0
+flag1=0
+df=pd.DataFrame({'questions':[],'opt1':[],'opt2':[],'opt3':[],'opt4':[],'answer':[]})
+mydb=mysql.connector.connect(host='localhost', user='root')
+mycursor=mydb.cursor()
+#mycursor('create database mydb')
+#mydb.commit()
+
+
+def closewhole():
+    root.destroy()
+def enterinexl():
+    def submitinexl():
+        global df
+        ques=qlabelinexlentry.get()
+        opt1=opt1entry.get()
+        opt2=opt2entry.get()
+        opt3=opt3entry.get()
+        opt4=opt4entry.get()
+        ansinexl=ansentry.get()
+        ansinexl=int(ansinexl)
+        ques=str(ques)
+        opt1=str(opt1)
+        opt2=str(opt2)
+        opt3=str(opt3)
+        opt4=str(opt4)
+        df=df.append({'questions':[ques],'opt1':[opt1],'opt2':[opt2],'opt3':[opt3],'opt4':[opt4],'answer':[ansinexl]},ignore_index=True)
+        qlabelinexlentry.delete(0,END)
+        opt1entry.delete(0,END)
+        opt2entry.delete(0,END)
+        opt3entry.delete(0,END)
+        opt4entry.delete(0,END)
+        ansentry.delete(0,END)
+    def quitexl():
+        win5.destroy()
+        strtbtn()
+    global flag
+    global flag1
+    
+    flag1=2
+    flag=1
+    
+    
+    win5=Toplevel()
+    win5.geometry('600x300')
+    win5.title('Enter Data in Pandas/Excel')
+    qlabelinexl=Label(win5,text='Enter Question')
+    qlabelinexl.place(x=10,y=70)
+    qlabelinexlentry=Entry(win5,width=70)
+    qlabelinexlentry.place(x=120,y=70)
+    opt1label=Label(win5,text='Enter Option 1')
+    opt1label.place(x=30,y=100)
+    opt1entry=Entry(win5,width=30)
+    opt1entry.place(x=120,y=100)
+    opt2label=Label(win5,text='Enter Option 2')
+    opt2label.place(x=30,y=120)
+    opt2entry=Entry(win5,width=30)
+    opt2entry.place(x=120,y=120)
+    opt3label=Label(win5,text='Enter Option 3')
+    opt3label.place(x=30,y=140)
+    opt3entry=Entry(win5,width=30)
+    opt3entry.place(x=120,y=140)
+    opt4label=Label(win5,text='Enter Option 4')
+    opt4label.place(x=30,y=160)
+    opt4entry=Entry(win5,width=30)
+    opt4entry.place(x=120,y=160)
+    anslabel=Label(win5,text='Enter correct Option No(1-4)')
+    anslabel.place(x=10,y=200)
+    ansentry=Entry(win5,width=10)
+    ansentry.place(x=200,y=200)
+    subinexl=Button(win5,text='Submit',command=submitinexl)
+    subinexl.place(x=300,y=250)
+    delinexl=Button(win5,text='Close',command=quitexl)
+    delinexl.place(x=400,y=250)
+
+def strtbtn():
+    global flag
+    if flag==1:
+        inib2.config(text='Start exam',command=startfake)
+        inib2.place(x=180,y=100)
+    else:
+        pass
+def ctable():
+    global flag
+    if flag==0:
+        
+        try:  
+            mycursor.execute('use mydb')
+            mydb.commit()
+            mycursor.execute('create table sameer1(questions varchar(50),option1 varchar(20),option2 varchar(20),option3 varchar(20),option4 varchar(20), ans int)')
+            mydb.commit()
+            messagebox.showinfo('Success!','Table created!')
+            flag=1
+        except:
+            flag=1
+            pass
+       
+            
+    else:
+        pass
+
+    
+def enter():
+    def enterinexl1():
+        win4.destroy()
+        enterinexl()
+    def enterinsql1():
+        win4.destroy()
+        enterinsql()
+    win4=Toplevel()
+    win4.geometry('400x200')
+    win4.title('SQL or Excel/Pandas?')
+    qinenterlabel=Label(win4,text='Which format would you like to select to store questions?')
+    qinenterlabel.place(x=50,y=50)
+    sqlbtn=Button(win4,text='Use SQL',command=enterinsql1)
+    sqlbtn.place(x=50,y=100)
+    pandasbtn=Button(win4,text='Use Excel/Pandas',command=enterinexl1)
+    pandasbtn.place(x=250,y=100)
+    
+    
+    
+    
+def enterinsql():
+    
+    global flag1
+    flag1=1
+
+    
+    def submitq():
+       
+        def submitinsql():
+            #code for submitting data 
+            mycursor=mydb.cursor
+            q5=e1.get()
+            option1=oe1.get()
+            option2=oe2.get()
+            option3=oe3.get()
+            option4=oe4.get()
+            ans1=aentry.get()
+            e1.delete(0,END)
+            oe1.delete(0,END)
+            oe2.delete(0,END)
+            oe3.delete(0,END)
+            oe4.delete(0,END)
+            aentry.delete(0,END)
+            ans1=int(ans1)
+            
+            
+            try:
+                mycursor.execute('use mydb')
+                mycursor.commit()
+                cmd=f"insert into sameer1 values('{q5}','{option1}','{option2}','{option3}','{option4}',{ans1})"
+                mycursor.execute(cmd)
+                mydb.commit()
+                mycursor.close()
+            except:
+                messagebox.showerror('Error','Please check your data')
+        #closing window
+        def quit():
+            win1.destroy()
+            strtbtn()
+            
+            
+        #code for entering data
+        enloop=e1.get()
+        enloop=int(enloop)
+        e1.delete(0,END)
+        
+        for x in range(enloop):
+            inp.config(text='')
+            qlabel=Label(win1,text="Enter Question")
+            qlabel.place(x=40,y=60)
+            e1.config(width=40)
+            e1.place(x=150,y=60)
+            o1=Label(win1,text='Enter option 1')
+            o1.place(x=40,y=90)
+            oe1=Entry(win1,width=30)
+            oe1.place(x=150,y=90)
+            o2=Label(win1,text='Enter option 2')
+            o2.place(x=40,y=110)
+            oe2=Entry(win1,width=30)
+            oe2.place(x=150,y=110)
+            o3=Label(win1,text='Enter option 3')
+            o3.place(x=40,y=130)
+            oe3=Entry(win1,width=30)
+            oe3.place(x=150,y=130)
+            o4=Label(win1,text='Enter option 4')
+            o4.place(x=40,y=150)
+            oe4=Entry(win1,width=30)
+            oe4.place(x=150,y=150)
+            alabel=Label(win1,text='Enter correct option in range(1-4)')
+            alabel.place(x=40,y=200)
+            aentry=Entry(win1,width=10)
+            aentry.place(x=250,y=200)
+            subentry.config(command=submitinsql)
+            subentry.place(x=165,y=250)
+            closebtn=Button(win1,text='Close',command=quit)
+            closebtn.place(x=350,y=250)
+            
+     #asking for how many questions
+    
+    finalans=[]
+    win1=Toplevel()
+    win1.geometry('400x300')
+    ctable()
+    win1.title('Enter Questions, Options and answers')
+    inp=Label(win1,text='How many questions do you want?')
+    inp.place(x=100,y=100)
+    e1=Entry(win1,width=10)
+    e1.place(x=160,y=150)
+    subentry=Button(win1,text='Submit',command=submitq)
+    subentry.place(x=165,y=200)
+    
+def dtable():
+    global df
+    
+    try:
+            
+        mycursor.execute('use mydb')
+        mydb.commit()
+        mycursor.execute('drop table sameer1')
+        mydb.commit()
+        messagebox.showinfo('Success!','Data Deleted')
+    except:
+        messagebox.showerror('Error','Questions Data already deleted')
+    
+    l1=list(range(0,len(df)))
+    df=df.drop(index=l1)
+        
+    
+    
+def startfake():
+    if flag1==1:
+        finalans=[]
+        global x
+        #closing window
+        def quit1():
+            win2.destroy()
+        
+        #calculating and showing marks
+        def marks():
+            f=len(finalans)
+            messagebox.showinfo('Result',f"You have scored {f} marks")
+            
+    
+    
+    
+    
+        def start(x):
+        
+            
+            def startinc():
+                global x
+                userget=var.get()
+                userget=int(userget)
+                if userget==ansinresf[x]:
+                    finalans.append(1)
+                    x=x+1
+                    if x<len(qlistf):
+                        start(x)
+                    else:
+                        subbut.config(text='SHOW RESULT',command=marks)
+        
+            spc1=Label(win2,text='                          ')
+            spc1.place(x=20,y=60)
+            spc2=Label(win2,text='                          ')
+            spc2.place(x=20,y=80)
+            spc3=Label(win2,text='                          ')
+            spc3.place(x=20,y=100)
+            spc4=Label(win2,text='                          ')
+            spc4.place(x=20,y=120)
+            spc5=Label(win2,text='                          ')
+            spc5.place(x=20,y=40)
+            q1=qlistf[x]
+            opt1=o1listf[x]
+            opt2=o2listf[x]
+            opt3=o3listf[x]
+            opt3=o3listf[x]
+            opt4=o4listf[x]
+            var=IntVar()
+            queslabel=Label(win2,text=q1)
+            queslabel.place(x=20,y=40)
+            r1=Radiobutton(win2,text=opt1,variable=var,value=1)
+            r1.place(x=20,y=60)
+            r2=Radiobutton(win2,text=opt2,variable=var,value=2)
+            r2.place(x=20,y=80)
+            r3=Radiobutton(win2,text=opt3,variable=var,value=3)
+            r3.place(x=20,y=100)
+            r4=Radiobutton(win2,text=opt4,variable=var,value=4)
+            r4.place(x=20,y=120)  
+            subbut=Button(win2,text='NEXT',command=startinc)
+            subbut.place(x=220,y=200)
+            clbtn=Button(win2,text='Close',command=quit1)
+            clbtn.place(x=350,y=200)
+    
+    
+    
+        win2=Toplevel()
+        win2.geometry('500x300')
+        mycursor=mydb.cursor()
+        mycursor.execute('select questions from sameer1')
+        qlist=mycursor.fetchall()
+        for y in qlist:
+            qlistf.append(y[0])
+            mycursor.execute('select option1 from sameer1')
+        o1list=mycursor.fetchall()
+        for y in o1list:
+            o1listf.append(y[0])
+            mycursor.execute('select option2 from sameer1')
+        o2list=mycursor.fetchall()
+        for y in o2list:
+            o2listf.append(y[0])
+            mycursor.execute('select option3 from sameer1')
+        o3list=mycursor.fetchall()
+        for y in o3list:
+            o3listf.append(y[0])
+            mycursor.execute('select option4 from sameer1')
+        o4list=mycursor.fetchall()
+        for y in o4list:
+            o4listf.append(y[0])
+            mycursor.execute('select ans from sameer1')
+        ansinres=mycursor.fetchall()
+        for y in ansinres:
+            ansinresf.append(y[0])
+        start(x)
+    elif flag1==2:
+        finalans=[]
+        def marks1():
+            global finalans
+            fin=len(finalans)
+            win6.destroy()
+            messagebox.showinfo('Result',f"You have scored {fin} marks")
+        
+        def quit12():
+            win6.destroy()
+        
+        def start1(x):
+            
+            
+            
+            def starti():
+                global x
+                global finalans
+                userget=var.get()
+                ll1=[]
+                ll1.append(userget)
+                if ll1==answerl[x]:
+                    finalans.append(1)
+                x=x+1
+                if x<len(qlistinp):
+                    start1(x)
+                else:
+                    subbtninp.config(text='Show Result',command=marks1)
+                
+            spc1=Label(win6,text='                                                                  ')
+            spc1.place(x=20,y=60)
+            spc2=Label(win6,text='                          ')
+            spc2.place(x=20,y=80)
+            spc3=Label(win6,text='                          ')
+            spc3.place(x=20,y=100)
+            spc4=Label(win6,text='                          ')
+            spc4.place(x=20,y=120)
+            spc5=Label(win6,text='                          ')
+            spc5.place(x=20,y=40)
+            q1=qlistinp[x]
+            opt1=opt1l[x]
+            opt2=opt2l[x]
+            opt3=opt3l[x]
+            opt4=opt4l[x]
+            var=IntVar()
+            queslabel=Label(win6,text=q1)
+            queslabel.place(x=20,y=40)
+            r1=Radiobutton(win6,text=opt1,variable=var,value=1)
+            r1.place(x=20,y=60)
+            r2=Radiobutton(win6,text=opt2,variable=var,value=2)
+            r2.place(x=20,y=80)
+            r3=Radiobutton(win6,text=opt3,variable=var,value=3)
+            r3.place(x=20,y=100)
+            r4=Radiobutton(win6,text=opt4,variable=var,value=4)
+            r4.place(x=20,y=120)  
+            subbtninp=Button(win6,text='Next',command=starti)
+            subbtninp.place(x=220,y=200)
+            clbtn=Button(win6,text='Close',command=quit12)
+            clbtn.place(x=330,y=200)
+            
+            
+        
+        
+        qlistinp=list(df['questions'])
+        opt1l=list(df['opt1'])
+        opt2l=list(df['opt2'])
+        opt3l=list(df['opt3'])
+        opt4l=list(df['opt4'])
+        answerl=list(df['answer'])
+        win6=Toplevel()
+        win6.geometry('500x400')
+        win6.title('Examination')
+        start1(x)
+        
+    
+ 
+    
+ini=Label(root,text="Which option would you like to choose?")
+ini.place(x=40,y=50)
+inib1=Button(root,text="Enter Q/A",command=enter)
+inib1.place(x=50,y=100)
+inib2=Button(root)
+deltable=Button(root,text='Delete questions',command=dtable)
+deltable.place(x=50,y=150)
+closewin=Button(root,text='Close',command=closewhole)
+closewin.place(x=180,y=150)
+
+
+
+root.mainloop()
+
